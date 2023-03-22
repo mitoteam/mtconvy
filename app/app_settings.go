@@ -1,9 +1,12 @@
 package app
 
 import (
+	"bufio"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/mitoteam/mttools"
 )
@@ -78,5 +81,29 @@ func (s *appSettingsType) Print() {
 }
 
 func (s *appSettingsType) Check() bool {
+	cmd := exec.Command(s.FfmpegPath, "-version")
+	buffer, err := cmd.Output()
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	scanner := bufio.NewReader(strings.NewReader(string(buffer)))
+	out, _ := scanner.ReadString('\n')
+
+	log.Print("FFmpeg found: " + out)
+
+	cmd = exec.Command(s.FfprobePath, "-version")
+	buffer, err = cmd.Output()
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	scanner = bufio.NewReader(strings.NewReader(string(buffer)))
+	out, _ = scanner.ReadString('\n')
+
+	log.Print("FFprobe found: " + out)
+
 	return true
 }
