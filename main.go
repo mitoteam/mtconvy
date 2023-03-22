@@ -1,7 +1,17 @@
 package main
 
-import "log"
+import (
+	"os"
+
+	"github.com/mitoteam/mtconvy/app"
+)
 
 func main() {
-	log.Print("test")
+	app.AppSettings.Load()
+	app.AppSettings.Print()
+
+	if !app.AppSettings.Check() {
+		os.Exit(-1)
+		return
+	}
 }

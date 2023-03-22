@@ -1,0 +1,8 @@
+github.com/drhodes/golorem v0.0.0-20220328165741-da82e5b29246 h1:m0+1paUpmLlBpUxldAEvJZVCrNQpt2iyecCw4TdHdOc=
+github.com/drhodes/golorem v0.0.0-20220328165741-da82e5b29246/go.mod h1:NsKVpF4h4j13Vm6Cx7Kf0V03aJKjfaStvm5rvK4+FyQ=
+github.com/mitoteam/mttools v0.0.0-20230322113211-67b952346406 h1:hfvo5PZbEqhAbnJPRRnz7P9TAPKjNUVBAi+DIMHSbk4=
+github.com/mitoteam/mttools v0.0.0-20230322113211-67b952346406/go.mod h1:iGVf6nXs03Agz6rrkvaWMxYM7FyGO3zTrYJAblrYX48=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
+gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
