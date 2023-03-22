@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"log"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -81,26 +80,28 @@ func (s *appSettingsType) Print() {
 }
 
 func (s *appSettingsType) Check() bool {
-	cmd := exec.Command(s.FfmpegPath, "-version")
-	buffer, err := cmd.Output()
+	//Check FFMPEG
+	out, err := mttools.ExecCmd(s.FfmpegPath, []string{"-version"})
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	scanner := bufio.NewReader(strings.NewReader(string(buffer)))
-	out, _ := scanner.ReadString('\n')
+	//read first line
+	scanner := bufio.NewReader(strings.NewReader(out))
+	out, _ = scanner.ReadString('\n')
 
 	log.Print("FFmpeg found: " + out)
 
-	cmd = exec.Command(s.FfprobePath, "-version")
-	buffer, err = cmd.Output()
+	//Check FFPROBE
+	out, err = mttools.ExecCmd(s.FfprobePath, []string{"-version"})
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	scanner = bufio.NewReader(strings.NewReader(string(buffer)))
+	//read first line
+	scanner = bufio.NewReader(strings.NewReader(out))
 	out, _ = scanner.ReadString('\n')
 
 	log.Print("FFprobe found: " + out)
