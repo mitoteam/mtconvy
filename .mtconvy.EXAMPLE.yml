@@ -1,0 +1,19 @@
+# Rename this file to .mtconvy.yml and edit to override options.
+# File is looked in following locations: current dir, directory with `mtconvy` executable, home directory
+
+# Uncomment if you really need custom paths to ffmpeg binaries
+#ffmpeg_path: /var/packages/ffmpeg/target/bin/ffmpeg
+#ffprobe_path: /var/packages/ffmpeg/target/bin/ffprobe
+
+# One conversion per line. Run `ffmpeg -codec` to see supported codecs.
+#conversions:
+#  dts: eac3
+
+# Default is 640k
+#audio_bitrate: 640k
+
+# Appended to output file name
+#suffix: CONVERTED
+
+# Preferred languages for audio and subtitles to be default choice when selecting file streams. Could be overridden per-file.
+#languages: [UKR, ENG]
