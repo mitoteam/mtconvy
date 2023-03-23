@@ -1,9 +1,9 @@
 package app
 
 import (
-	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"regexp"
 	"sort"
 
@@ -70,8 +70,19 @@ func (t *Task) SelectFiles() {
 		}
 	}
 
-	fmt.Println("Selected files:")
+	//Create task items
 	for _, v := range numbers_list {
-		fmt.Println(options_list[v])
+		task_item := TaskItem{
+			Name: options_list[v],
+			Path: filepath.Join(t.path, options_list[v]),
+		}
+
+		t.items = append(t.items, task_item)
+	}
+}
+
+func (t *Task) SelectStreams() {
+	for _, item := range t.items {
+		item.SelectStreams()
 	}
 }

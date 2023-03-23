@@ -28,4 +28,5 @@ func main() {
 	task := app.NewTask(current_path)
 
 	task.SelectFiles()
+	task.SelectStreams()
 }
