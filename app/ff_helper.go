@@ -46,7 +46,9 @@ func FfGetStreamList(path string) []FfStream {
 
 	list := make([]FfStream, 0, len(data.Streams))
 
-	for _, streamData := range data.Streams {
+	for i := 0; i < len(data.Streams); i++ {
+		streamData := data.Streams[i]
+
 		stream := FfStream{
 			Index: streamData.Index,
 			Data:  streamData,

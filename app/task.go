@@ -12,7 +12,7 @@ import (
 )
 
 type Task struct {
-	items []TaskItem
+	items []*TaskItem
 
 	path string
 }
@@ -73,18 +73,24 @@ func (t *Task) SelectFiles() {
 	}
 
 	//Create task items
-	for _, v := range numbers_list {
+	for i := 0; i < len(numbers_list); i++ {
 		task_item := TaskItem{
-			Name: options_list[v],
-			Path: filepath.Join(t.path, options_list[v]),
+			Name: options_list[numbers_list[i]],
+			Path: filepath.Join(t.path, options_list[numbers_list[i]]),
 		}
 
-		t.items = append(t.items, task_item)
+		t.items = append(t.items, &task_item)
 	}
 }
 
 func (t *Task) SelectStreams() {
-	for _, item := range t.items {
-		item.SelectStreams()
+	for i := 0; i < len(t.items); i++ {
+		t.items[i].SelectStreams()
+	}
+}
+
+func (t *Task) Convert() {
+	for i := 0; i < len(t.items); i++ {
+		t.items[i].Convert()
 	}
 }

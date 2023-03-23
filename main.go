@@ -44,4 +44,5 @@ func main() {
 
 	task.SelectFiles()
 	task.SelectStreams()
+	task.Convert()
 }
