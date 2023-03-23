@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/mitoteam/mttools"
 )
@@ -135,9 +136,12 @@ func (task_item *TaskItem) Convert() {
 
 	//call ffmpeg
 	//fmt.Print(args)
+	start := time.Now()
 	if err := mttools.ExecCmdWaitPrint(AppSettings.FfmpegPath, args); err != nil {
 		log.Fatal(err.Error())
 	}
 
-	fmt.Println("Done...")
+	elapsed := time.Since(start).Round(time.Second)
+
+	fmt.Printf("Done. Took %s.\n", elapsed)
 }
