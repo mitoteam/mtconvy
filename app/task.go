@@ -39,18 +39,20 @@ func (t *Task) SelectFiles() {
 
 	re := regexp.MustCompile(`^(.+)\.(mkv)$`)
 
-	for _, value := range files_list {
+	for i := 0; i < len(files_list); i++ {
+		file_entry := files_list[i]
+
 		//skip directories
-		if value.IsDir() {
+		if file_entry.IsDir() {
 			continue
 		}
 
 		//check by regex
-		if !re.MatchString(value.Name()) {
+		if !re.MatchString(file_entry.Name()) {
 			continue
 		}
 
-		options_list = append(options_list, value.Name())
+		options_list = append(options_list, file_entry.Name())
 	}
 
 	//sort by name
