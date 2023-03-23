@@ -33,16 +33,12 @@ func getDefaultAppSettings() *appSettingsType {
 	}
 }
 
-func (s *appSettingsType) Load() {
-	var filename string
+func (s *appSettingsType) Load(path string) {
+	var settingspath string
+	var err error
 
 	//1) look in current directory
-	settingspath, err := os.Getwd()
-	//log.Println(settingspath)
-
-	if err == nil {
-		filename = filepath.Join(settingspath, DefaultSettingsFilename)
-	}
+	filename := filepath.Join(path, DefaultSettingsFilename)
 
 	//2) look near executable
 	if !mttools.IsFileExists(filename) {
