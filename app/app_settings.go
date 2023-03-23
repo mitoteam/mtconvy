@@ -14,7 +14,10 @@ type appSettingsType struct {
 	FfmpegPath  string `yaml:"ffmpeg_path"`
 	FfprobePath string `yaml:"ffprobe_path"`
 
-	DefaultAudioCodec string `yaml:"default_audio_codec"`
+	Conversions  map[string]string `yaml:"conversions"`
+	AudioBitrate string            `yaml:"audio_bitrate"`
+
+	Suffix string `yaml:"suffix"`
 }
 
 const DefaultSettingsFilename = ".mtconvy.yml"
@@ -26,11 +29,19 @@ func init() {
 }
 
 func getDefaultAppSettings() *appSettingsType {
-	return &appSettingsType{
-		FfmpegPath:        "ffmpeg",
-		FfprobePath:       "ffprobe",
-		DefaultAudioCodec: "eac3",
+	settings := appSettingsType{
+		FfmpegPath:  "ffmpeg",
+		FfprobePath: "ffprobe",
+
+		Conversions:  make(map[string]string),
+		AudioBitrate: "640k",
+
+		Suffix: "CONVERTED",
 	}
+
+	settings.Conversions["dts"] = "eac3"
+
+	return &settings
 }
 
 func (s *appSettingsType) Load(path string) {

@@ -97,7 +97,7 @@ func (task_item *TaskItem) SelectStreams() {
 func (task_item *TaskItem) Convert() {
 	new_filename := filepath.Base(task_item.Path)
 	new_filename = strings.TrimSuffix(new_filename, filepath.Ext(new_filename))
-	new_filename = new_filename + "_" + AppSettings.DefaultAudioCodec + ".mkv"
+	new_filename = new_filename + "_" + AppSettings.Suffix + ".mkv"
 	new_filename = filepath.Join(filepath.Dir(task_item.Path), new_filename)
 
 	args := make([]string, 0, 10)
@@ -114,19 +114,21 @@ func (task_item *TaskItem) Convert() {
 	//selected streams
 	for i := 0; i < len(task_item.Streams); i++ {
 		stream := task_item.Streams[i]
+
+		//add stream from source
 		args = append(args, "-map", "0:"+strconv.Itoa(stream.Index))
 
-		if stream.Data.CodecType == "video" || stream.Data.CodecType == "subtitle" {
-			args = append(args, "-c:"+strconv.Itoa(i), "copy")
-		}
+		selector := ":" + strconv.Itoa(i)
 
-		if stream.Data.CodecType == "audio" {
-			if stream.Data.CodecName == AppSettings.DefaultAudioCodec || stream.Data.CodecName == "ac3" {
-				args = append(args, "-c:"+strconv.Itoa(i), "copy")
-			} else {
-				args = append(args, "-c:"+strconv.Itoa(i), AppSettings.DefaultAudioCodec)
-				args = append(args, "-b:"+strconv.Itoa(i), "640k")
+		if new_codec, exists := AppSettings.Conversions[stream.Data.CodecName]; exists {
+			args = append(args, "-c"+selector, new_codec)
+
+			if stream.Data.CodecType == "audio" {
+				args = append(args, "-b"+selector, AppSettings.AudioBitrate)
 			}
+		} else {
+			//copy stream without re-encoding
+			args = append(args, "-c"+selector, "copy")
 		}
 	}
 
