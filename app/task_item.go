@@ -26,37 +26,32 @@ func (task_item *TaskItem) SelectStreams() {
 
 	//Prepare default selection
 	default_selected := make([]int, 0)
-	var has_video, has_rus_audio, has_eng_audio, has_rus_st, has_eng_st bool
+	default_stream_map := make(map[string]bool)
 
 	for i := 0; i < len(stream_list); i++ {
 		stream := stream_list[i]
 
-		if !has_video && stream.Data.CodecType == "video" {
-			default_selected = append(default_selected, i)
-			has_video = true
-		}
+		// at least one video stream
+		if stream.Data.CodecType == "video" {
+			_, has_stream := default_stream_map["video"]
 
-		if stream.Data.CodecType == "audio" {
-			if stream.Language == "RUS" && !has_rus_audio {
+			if !has_stream {
 				default_selected = append(default_selected, i)
-				has_rus_audio = true
-			}
-
-			if stream.Language == "ENG" && !has_eng_audio {
-				default_selected = append(default_selected, i)
-				has_eng_audio = true
+				default_stream_map["video"] = true
 			}
 		}
 
-		if stream.Data.CodecType == "subtitle" {
-			if stream.Language == "RUS" && !has_rus_st {
-				default_selected = append(default_selected, i)
-				has_rus_st = true
-			}
+		if stream.Data.CodecType == "audio" || stream.Data.CodecType == "subtitle" {
+			for j := 0; j < len(AppSettings.Languages); j++ {
+				language := AppSettings.Languages[j]
+				key := stream.Data.CodecType + "_" + language
 
-			if stream.Language == "ENG" && !has_eng_st {
-				default_selected = append(default_selected, i)
-				has_eng_st = true
+				_, has_stream := default_stream_map[key]
+
+				if !has_stream && stream.Language == strings.ToUpper(language) {
+					default_selected = append(default_selected, i)
+					default_stream_map[key] = true
+				}
 			}
 		}
 	}

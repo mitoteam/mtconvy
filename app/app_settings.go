@@ -18,6 +18,8 @@ type appSettingsType struct {
 	AudioBitrate string            `yaml:"audio_bitrate"`
 
 	Suffix string `yaml:"suffix"`
+
+	Languages []string `yaml:"languages"`
 }
 
 const DefaultSettingsFilename = ".mtconvy.yml"
@@ -33,13 +35,12 @@ func getDefaultAppSettings() *appSettingsType {
 		FfmpegPath:  "ffmpeg",
 		FfprobePath: "ffprobe",
 
-		Conversions:  make(map[string]string),
+		Conversions:  map[string]string{"dts": "eac3"},
 		AudioBitrate: "640k",
 
-		Suffix: "CONVERTED",
+		Suffix:    "CONVERTED",
+		Languages: []string{"RUS", "ENG"},
 	}
-
-	settings.Conversions["dts"] = "eac3"
 
 	return &settings
 }
