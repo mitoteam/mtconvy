@@ -15,7 +15,7 @@ func AskUserChoice(
 	message, prompt string,
 	options_list []string,
 ) []int {
-	fmt.Println("\n*** " + message)
+	fmt.Println("*** " + message)
 
 	for k, v := range options_list {
 		fmt.Printf("%2d: %s\n", k+1, v)

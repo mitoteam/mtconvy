@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -57,6 +58,7 @@ func (t *Task) SelectFiles() {
 
 	//TODO: no files found!
 
+	fmt.Println()
 	numbers_list := AskUserChoice(
 		"Please select files to process",
 		"Enter file numbers separated by space or comma and press Enter. Empty input means \"All Files\".\nYour choice: ",
