@@ -39,7 +39,7 @@ func getDefaultAppSettings() *appSettingsType {
 		AudioBitrate: "640k",
 
 		Suffix:    "CONVERTED",
-		Languages: []string{"RUS", "ENG"},
+		Languages: []string{"ENG"},
 	}
 
 	return &settings
