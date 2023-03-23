@@ -104,7 +104,7 @@ func (task_item *TaskItem) Convert() {
 
 	//generic options
 	args = append(args, "-y")                 //overwrite DST file silently
-	args = append(args, "-hide_banner")       //do not print FFPMEG intro banner
+	args = append(args, "-hide_banner")       //do not print ffmpeg intro banner
 	args = append(args, "-loglevel", "error") //be silent
 	args = append(args, "-stats", "-stats_period", "5")
 
