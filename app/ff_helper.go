@@ -32,7 +32,7 @@ type jsonStream struct {
 
 func FfGetStreamList(path string) []FfStream {
 	args := make([]string, 0)
-	args = append(args, "-v", "quiet", "-print_format", "json", "-show_streams", path)
+	args = append(args, "-hide_banner", "-v", "quiet", "-print_format", "json", "-show_streams", path)
 
 	json_str, err := mttools.ExecCmd(AppSettings.FfprobePath, args)
 	if err != nil {
