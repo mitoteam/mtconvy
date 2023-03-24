@@ -36,7 +36,7 @@ func FfGetStreamList(path string) []FfStream {
 
 	json_str, err := mttools.ExecCmd(AppSettings.FfprobePath, args)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err.Error())
 	}
 
 	data := jsonFull{}

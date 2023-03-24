@@ -30,17 +30,20 @@ func NewTask(path string) *Task {
 }
 
 func (t *Task) SelectFiles() {
-	files_list, err := os.ReadDir(t.path)
+	directory_files_list, err := os.ReadDir(t.path)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	options_list := make([]string, 0, len(files_list))
+	//options to display to user
+	options_list := make([]string, 0, len(directory_files_list))
+	//raw file names
+	files_list := make([]string, 0, len(directory_files_list))
 
 	re := regexp.MustCompile(`^(.+)\.(mkv|mp4|avi|m4v)$`)
 
-	for i := 0; i < len(files_list); i++ {
-		file_entry := files_list[i]
+	for i := 0; i < len(directory_files_list); i++ {
+		file_entry := directory_files_list[i]
 
 		//skip directories
 		if file_entry.IsDir() {
@@ -60,6 +63,7 @@ func (t *Task) SelectFiles() {
 		}
 
 		options_list = append(options_list, option)
+		files_list = append(files_list, file_entry.Name())
 	}
 
 	//sort by name
@@ -85,7 +89,7 @@ func (t *Task) SelectFiles() {
 	for i := 0; i < len(numbers_list); i++ {
 		task_item := TaskItem{
 			Name: options_list[numbers_list[i]],
-			Path: filepath.Join(t.path, options_list[numbers_list[i]]),
+			Path: filepath.Join(t.path, files_list[numbers_list[i]]),
 		}
 
 		t.items = append(t.items, &task_item)
