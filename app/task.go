@@ -37,7 +37,7 @@ func (t *Task) SelectFiles() {
 
 	options_list := make([]string, 0, len(files_list))
 
-	re := regexp.MustCompile(`^(.+)\.(mkv)$`)
+	re := regexp.MustCompile(`^(.+)\.(mkv|mp4|avi|m4v)$`)
 
 	for i := 0; i < len(files_list); i++ {
 		file_entry := files_list[i]
