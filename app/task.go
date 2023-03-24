@@ -52,7 +52,14 @@ func (t *Task) SelectFiles() {
 			continue
 		}
 
-		options_list = append(options_list, file_entry.Name())
+		option := file_entry.Name()
+
+		info, err := file_entry.Info()
+		if err == nil {
+			option += ", " + mttools.FormatFileSize(info.Size())
+		}
+
+		options_list = append(options_list, option)
 	}
 
 	//sort by name
