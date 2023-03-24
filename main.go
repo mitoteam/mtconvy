@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -13,6 +14,11 @@ func main() {
 
 	//Read path from args if available
 	if len(os.Args) > 1 {
+		if os.Args[1] == "version" {
+			fmt.Println(app.BuildVersion)
+			os.Exit(0)
+		}
+
 		current_path = os.Args[1]
 	} else {
 		var err error
