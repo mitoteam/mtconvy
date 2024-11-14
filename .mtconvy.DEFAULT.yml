@@ -1,4 +1,4 @@
-# Rename this file to .mtconvy.yml and edit to override options.
+# mtconvy settings file
 # File is looked in following locations: current dir, directory with `mtconvy` executable, home directory
 
 # Uncomment if you really need custom paths to ffmpeg binaries
