@@ -46,7 +46,7 @@ func main() {
 	}
 
 	//Create task
-	log.Printf("Current path: %s", current_path)
+	log.Printf("Current directory: %s", current_path)
 
 	task := app.NewTask(current_path)
 

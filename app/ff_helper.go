@@ -3,6 +3,7 @@ package app
 import (
 	"encoding/json"
 	"log"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -36,7 +37,8 @@ func FfGetStreamList(path string) []FfStream {
 
 	json_str, err := mttools.ExecCmd(AppSettings.FfprobePath, args)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Printf("Error running ffprobe for %s: %s", filepath.Base(path), err.Error())
+		return make([]FfStream, 0) //empty list
 	}
 
 	data := jsonFull{}
