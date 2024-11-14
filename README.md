@@ -45,3 +45,5 @@ Details: [scoop-bucket](https://github.com/mitoteam/scoop-bucket).
 ## Usage
 
 Just run `mtconvy` in directory you want to convert some file(s). It will ask you to choose files to convert first. Then it will ask you what streams to keep for each file.
+
+You can adjust some options in config file `.mtconvy.yml`.
