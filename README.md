@@ -20,19 +20,28 @@ This utility makes selection of tracks and conversion very simple and easy.
 
 ## Installation
 
-### Using Scoop
+### Using Scoop (Windows)
 
-* Add bucket: `scoop bucket add mitoteam https://github.com/mitoteam/scoop-bucket`
-* Install: `scoop install mitoteam/mtconvy`
+* Add bucket:
+
+```sh
+scoop bucket add mitoteam https://github.com/mitoteam/scoop-bucket
+```
+
+* Install:
+
+```sh
+scoop install mitoteam/mtconvy
+```
 
 Details: [scoop-bucket](https://github.com/mitoteam/scoop-bucket).
 
-### Manual
+### Manual installation (Windows or Linux)
 
 * Download latest release from [Releases](https://github.com/mitoteam/mtconvy/releases) page.
 * Unpack with 7-zip.
-* Add path to mtconvy.exe to system's or user's PATH variable.
+* Add path to mtconvy to system's or user's PATH variable.
 
 ## Usage
 
-Just run mtconvy.exe in directory you want to convert some file(s). It will ask you to choose files to convert first. Then it will ask you what streams to keep for each file.
+Just run `mtconvy` in directory you want to convert some file(s). It will ask you to choose files to convert first. Then it will ask you what streams to keep for each file.
