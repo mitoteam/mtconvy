@@ -144,7 +144,7 @@ func (task_item *TaskItem) Convert() {
 		//call ffmpeg
 		//fmt.Print(args)
 		start := time.Now()
-		if err := mttools.ExecCmdWaitPrint(AppSettings.FfmpegPath, args); err != nil {
+		if _, err := mttools.ExecCmdWaitAndPrint(AppSettings.FfmpegPath, args); err != nil {
 			log.Fatal(err.Error())
 		}
 
