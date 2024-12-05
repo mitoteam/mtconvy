@@ -10,13 +10,12 @@ on:
     branches: [ "main" ]
 
 jobs:
-
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
       with:
-        submodules: true
+        submodules: recursive
         
     - name: Set up Go
       uses: actions/setup-go@v4
@@ -28,3 +27,6 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+
+    - name: MT Tests
+      run: make tests
