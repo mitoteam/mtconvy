@@ -2,3 +2,9 @@
 	path = internal/mttools
 	url = https://github.com/mitoteam/mttools.git
 	branch = main
+  ignore = all # ignore hash changes
+[submodule "internal/goappbase"]
+	path = internal/goappbase
+	url = https://github.com/mitoteam/goappbase.git
+	branch = main
+  ignore = all # ignore hash changes

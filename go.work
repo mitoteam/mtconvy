@@ -1,4 +1,5 @@
 go 1.23
 
 use .
+use ./internal/goappbase
 use ./internal/mttools
