@@ -45,10 +45,10 @@ jobs:
         draft: true
         tag_name: "v${{ env.MT_VERSION }}"
         files: |
-          dist/mt-tgadmin-${{ env.MT_VERSION }}-linux32.7z
-          dist/mt-tgadmin-${{ env.MT_VERSION }}-linux64.7z
-          dist/mt-tgadmin-${{ env.MT_VERSION }}-win32.7z
-          dist/mt-tgadmin-${{ env.MT_VERSION }}-win64.7z
+          dist/mtconvy-${{ env.MT_VERSION }}-linux32.7z
+          dist/mtconvy-${{ env.MT_VERSION }}-linux64.7z
+          dist/mtconvy-${{ env.MT_VERSION }}-win32.7z
+          dist/mtconvy-${{ env.MT_VERSION }}-win64.7z
           dist/checksums.sha256
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
