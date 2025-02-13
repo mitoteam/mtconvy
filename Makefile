@@ -4,7 +4,7 @@ EXECUTABLE_NAME := mtconvy
 ARCH_FILES := ./${DIST_DIR}/.mtconvy.yml
 
 #do the job
-include internal/goappbase/Makefile.inc.mk
+include internal/goapp/Makefile.inc.mk
 
 # extend targets
 before-build::
