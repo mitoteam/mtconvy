@@ -2,8 +2,11 @@ module github.com/mitoteam/mtconvy
 
 go 1.24
 
+//DEV versions of modules
+//replace github.com/mitoteam/mttools => ../mttools
+
 require (
-	github.com/mitoteam/mttools v0.0.0-20230322113211-67b952346406
+	github.com/mitoteam/mttools v1.0.5
 	golang.org/x/exp v0.0.0-20230321023759-10a507213a29
 )
 
