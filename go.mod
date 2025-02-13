@@ -1,6 +1,6 @@
 module github.com/mitoteam/mtconvy
 
-go 1.23
+go 1.24
 
 require (
 	github.com/mitoteam/mttools v0.0.0-20230322113211-67b952346406
