@@ -30,7 +30,9 @@ func main() {
 		}
 	}
 
-	fmt.Printf("mtconvy v%s - ffmpeg helper utility by MiTo Team. https://mito-team.com\n\n", goapp.BuildVersion)
+	fmt.Printf("mtconvy v%s - ffmpeg helper utility by MiTo Team. https://mito-team.com\n", goapp.BuildVersion)
+	fmt.Println(goapp.MOTTO)
+	fmt.Println()
 
 	if !mttools.IsDirExists(current_path) {
 		log.Fatalf("Directory %s does not exist", current_path)
