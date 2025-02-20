@@ -22,7 +22,11 @@ This utility makes selection of tracks and conversion very simple and easy.
 
 ### Using Scoop (Windows)
 
-* Add bucket:
+Scoop is useful command-line installer and updater for Windows.
+
+* Install `scoop` (_if you have not already_): https://github.com/ScoopInstaller/Scoop/wiki/Quick-Start
+
+* Add bucket (_if you have not already_):
 
 ```sh
 scoop bucket add mitoteam https://github.com/mitoteam/scoop-bucket
@@ -34,7 +38,11 @@ scoop bucket add mitoteam https://github.com/mitoteam/scoop-bucket
 scoop install mitoteam/mtconvy
 ```
 
-Details: [scoop-bucket](https://github.com/mitoteam/scoop-bucket).
+* Update:
+
+```sh
+scoop update mtconvy
+```
 
 ### Manual installation (Windows or Linux)
 
