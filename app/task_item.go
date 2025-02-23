@@ -73,21 +73,26 @@ func (task_item *TaskItem) SelectStreams() {
 			options_list[default_selected[i]] = "* " + options_list[default_selected[i]]
 		}
 
-		selected := AskUserChoice(
-			"Please select streams to include to output",
+		fmt.Println("Please select streams to include to output")
+
+		selected, err := mttools.AskUserChoiceMultiple(
 			"Your choice (default: "+default_choice+"): ",
-			options_list,
+			options_list, true,
 		)
 
-		if len(selected) == 0 {
-			selected = default_selected
-		}
+		if err != nil {
+			task_item.Streams = make([]FfStream, 0)
+		} else {
+			if len(selected) == 0 {
+				selected = default_selected
+			}
 
-		//fill with selected streams
-		task_item.Streams = make([]FfStream, len(selected))
+			//fill with selected streams
+			task_item.Streams = make([]FfStream, len(selected))
 
-		for i := 0; i < len(selected); i++ {
-			task_item.Streams[i] = stream_list[selected[i]]
+			for i := 0; i < len(selected); i++ {
+				task_item.Streams[i] = stream_list[selected[i]]
+			}
 		}
 	} else {
 		//clear

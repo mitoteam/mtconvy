@@ -73,11 +73,16 @@ func (t *Task) SelectFiles() {
 
 	if len(options_list) > 0 {
 		fmt.Println()
-		numbers_list := AskUserChoice(
-			"Please select files to process",
+		fmt.Println("*** Please select files to process:")
+		numbers_list, err := mttools.AskUserChoiceMultiple(
 			"Enter file numbers separated by space or comma and press Enter. Empty input means \"All Files\".\nYour choice: ",
-			options_list,
+			options_list, true,
 		)
+
+		if err != nil {
+			log.Println(err.Error())
+			return
+		}
 
 		//all files
 		if len(numbers_list) == 0 {

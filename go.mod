@@ -6,9 +6,8 @@ go 1.24
 //replace github.com/mitoteam/mttools => ../mttools
 
 require (
-	github.com/mitoteam/goapp v1.0.1
-	github.com/mitoteam/mttools v1.0.5
-	golang.org/x/exp v0.0.0-20250210185358-939b2ce775ac
+	github.com/mitoteam/goapp v1.0.5
+	github.com/mitoteam/mttools v1.0.7
 )
 
 require (
