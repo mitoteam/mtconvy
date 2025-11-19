@@ -12,13 +12,18 @@ import (
 )
 
 type TaskItem struct {
-	Name string
-	Path string
+	Name     string
+	Path     string
+	skipTask bool // do not convert this fille at all
 
 	Streams []FfStream
 }
 
 func (task_item *TaskItem) SelectStreams() {
+	//clear list
+	task_item.Streams = make([]FfStream, 0)
+
+	// show available streams and ask user
 	fmt.Println()
 	fmt.Printf("*** FILE: %s\n", task_item.Name)
 	fmt.Println("Running ffprobe...")
@@ -73,16 +78,19 @@ func (task_item *TaskItem) SelectStreams() {
 			options_list[default_selected[i]] = "* " + options_list[default_selected[i]]
 		}
 
-		fmt.Println("Please select streams to include to output")
+		fmt.Println("Please select streams to include to output. \"0\" = skip file conversion.")
 
 		selected, err := mttools.AskUserChoiceMultiple(
 			"Your choice (default: "+default_choice+"): ",
 			options_list, true,
 		)
 
-		if err != nil {
-			task_item.Streams = make([]FfStream, 0)
-		} else {
+		if err == nil {
+			if len(selected) == 1 && selected[0] == -1 {
+				task_item.skipTask = true
+				return
+			}
+
 			if len(selected) == 0 {
 				selected = default_selected
 			}
@@ -94,13 +102,15 @@ func (task_item *TaskItem) SelectStreams() {
 				task_item.Streams[i] = stream_list[selected[i]]
 			}
 		}
-	} else {
-		//clear
-		task_item.Streams = make([]FfStream, 0)
 	}
 }
 
 func (task_item *TaskItem) Convert() {
+	if task_item.skipTask {
+		fmt.Println("\nSkipping conversion for ", task_item.Name)
+		return
+	}
+
 	//only if something was selected
 	if len(task_item.Streams) > 0 {
 		new_filename := filepath.Base(task_item.Path)
