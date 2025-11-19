@@ -7,7 +7,7 @@ go 1.25.0
 
 require (
 	github.com/mitoteam/goapp v1.0.6
-	github.com/mitoteam/mttools v1.0.7
+	github.com/mitoteam/mttools v1.0.8
 )
 
 require (

@@ -121,6 +121,8 @@ github.com/mattn/go-sqlite3 v1.14.22/go.mod h1:Uh1q+B4BYcTPb+yiD3kU8Ct7aC0hY9fxU
 github.com/memcachier/mc v2.0.1+incompatible/go.mod h1:7bkvFE61leUBvXz+yxsOnGBQSZpBSPIMUQSmmSHvuXc=
 github.com/memcachier/mc/v3 v3.0.3/go.mod h1:GzjocBahcXPxt2cmqzknrgqCOmMxiSzhVKPOe90Tpug=
 github.com/mitoteam/goapp v1.0.5/go.mod h1:Hkqwxsf3MjxFtP8QMIGphIhI6S855JtXJt2ifNYxOGU=
+github.com/mitoteam/mttools v1.0.8 h1:Lbq0j9FUWVslarCez/3VM4Za+4kAxVc/4XnJzqD1r+s=
+github.com/mitoteam/mttools v1.0.8/go.mod h1:pgReIWU3E5FzIcyzB1JqPYIvsszInvFosMsd5v+qK00=
 github.com/montanaflynn/stats v0.7.1/go.mod h1:etXPPgVO6n31NxCd9KQUMvCM+ve0ruNzt6R8Bnaayow=
 github.com/pbnjay/memory v0.0.0-20210728143218-7b4eea64cf58/go.mod h1:DXv8WO4yhMYhSNPKjeNKa5WY9YCIEBRbNzFFPJbWO6Y=
 github.com/pelletier/go-toml/v2 v2.2.2/go.mod h1:1t835xjRzz80PqgE6HHgN2JOsmgYu/h4qDAS4n929Rs=
