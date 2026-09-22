@@ -10,17 +10,20 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       with:
         submodules: recursive
+
+    - name: Checking out all submodules to the tip of a branch
+      run: git submodule foreach --recursive git checkout main
 
     - name: Set env
       run: echo "TERM=linux" >> "$GITHUB_ENV"
 
     - name: Set up Go
-      uses: actions/setup-go@v5
+      uses: actions/setup-go@v7
       with:
-        go-version: '^1.24'
+        go-version: '^1.27'
         check-latest: true
 
     - name: Build
