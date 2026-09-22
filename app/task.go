@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strings"
 
 	huh "charm.land/huh/v2"
 	"github.com/mitoteam/mttools"
@@ -105,9 +106,13 @@ func (t *Task) SelectFiles() error {
 
 		//Create task items
 		for i := 0; i < len(numbers_list); i++ {
+			file_name := files_list[numbers_list[i]]
+
 			task_item := TaskItem{
-				Name: options_list[numbers_list[i]],
-				Path: filepath.Join(t.path, files_list[numbers_list[i]]),
+				Name:     options_list[numbers_list[i]],
+				Path:     filepath.Join(t.path, file_name),
+				BaseName: strings.TrimSuffix(file_name, filepath.Ext(file_name)),
+				Ext:      filepath.Ext(file_name),
 			}
 
 			t.items = append(t.items, &task_item)

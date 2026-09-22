@@ -19,6 +19,9 @@ type appSettingsType struct {
 
 	Suffix string `yaml:"suffix"`
 
+	ReplaceOriginal bool   `yaml:"replace_original"`
+	OriginalSuffix  string `yaml:"original_suffix"`
+
 	Languages []string `yaml:"languages"`
 }
 

@@ -2,7 +2,7 @@ package app
 
 import (
 	"fmt"
-	"log"
+	"os"
 	"path/filepath"
 	"slices"
 	"strconv"
@@ -15,9 +15,12 @@ import (
 )
 
 type TaskItem struct {
-	Name     string
-	Path     string
-	skipTask bool // do not convert this fille at all
+	Name     string //task name (filename + size)
+	BaseName string //filename without extension
+	Ext      string //file extension
+	Path     string //full path with filename
+
+	skipTask bool // do not convert this file at all
 
 	Streams []FfStream
 }
@@ -124,10 +127,7 @@ func (task_item *TaskItem) Convert() error {
 
 	//only if something was selected
 	if len(task_item.Streams) > 0 {
-		new_filename := filepath.Base(task_item.Path)
-		new_filename = strings.TrimSuffix(new_filename, filepath.Ext(new_filename))
-		new_filename = new_filename + "_" + AppSettings.Suffix + ".mkv"
-		new_filename = filepath.Join(filepath.Dir(task_item.Path), new_filename)
+		new_filename := filepath.Join(filepath.Dir(task_item.Path), task_item.BaseName+"_"+AppSettings.Suffix+task_item.Ext)
 
 		args := make([]string, 0, 10)
 
@@ -171,12 +171,26 @@ func (task_item *TaskItem) Convert() error {
 		//fmt.Print(args)
 		start := time.Now()
 		if _, err := mttools.ExecCmdWaitAndPrint(AppSettings.FfmpegPath, args); err != nil {
-			log.Fatal(err.Error())
+			return err
 		}
 
 		elapsed := time.Since(start).Round(time.Second)
 
 		fmt.Printf("Done. Took %s.\n", elapsed)
+
+		if AppSettings.ReplaceOriginal {
+			//rename original file
+			original_filename := filepath.Join(filepath.Dir(task_item.Path), task_item.BaseName+"_"+AppSettings.OriginalSuffix+task_item.Ext)
+
+			if err := os.Rename(task_item.Path, original_filename); err != nil {
+				return fmt.Errorf("Failed to rename original file: %v", err)
+			}
+
+			//rename converted file to original name
+			if err := os.Rename(new_filename, task_item.Path); err != nil {
+				return fmt.Errorf("Failed to rename converted file: %v", err)
+			}
+		}
 	}
 
 	return nil

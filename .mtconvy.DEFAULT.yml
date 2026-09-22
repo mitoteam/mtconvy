@@ -12,6 +12,11 @@
 # Suffix to be appended to output file name.
 #suffix: CONVERTED
 
+# Set to yes to replace original files with converted ones after successful conversion.
+# Original files will be renamed with `original_suffix` appended to their names and converted file will be renamed to original.
+#replace_original: no
+#original_suffix: ORIGINAL
+
 # Preferred languages for audio and subtitles to be default choice when selecting file streams. Could be overridden per-file.
 #languages: [UKR, ENG]
 
