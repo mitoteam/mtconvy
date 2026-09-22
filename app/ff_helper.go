@@ -15,6 +15,7 @@ type FfStream struct {
 	Index    int
 	Name     string
 	Language string
+	Size     int64
 	Data     jsonStream
 }
 
@@ -98,6 +99,23 @@ func FfGetStreamList(path string) ([]FfStream, error) {
 			}
 		}
 
+		//stream size
+		// checking tags for name with NUMBER_OF_BYTES prefix
+		for key, val := range streamData.Tags {
+			if strings.HasPrefix(key, "NUMBER_OF_BYTES") {
+				// convert to int64
+				if parsedSize, err := strconv.ParseInt(val, 10, 64); err == nil {
+					stream.Size = parsedSize
+					break
+				}
+			}
+		}
+
+		if stream.Size > 0 {
+			stream.Name += ", " + mttools.FormatFileSize(int64(stream.Size))
+		}
+
+		// append to list
 		list = append(list, stream)
 	}
 
