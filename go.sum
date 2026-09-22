@@ -125,8 +125,8 @@ github.com/mattn/go-sqlite3 v1.14.22 h1:2gZY6PC6kBnID23Tichd1K+Z0oS6nE/XwU+Vz/5o
 github.com/mattn/go-sqlite3 v1.14.22/go.mod h1:Uh1q+B4BYcTPb+yiD3kU8Ct7aC0hY9fxUwlHK0RXw+Y=
 github.com/mitchellh/hashstructure/v2 v2.0.2 h1:vGKWl0YJqUNxE8d+h8f6NJLcCJrgbhC4NcD46KavDd4=
 github.com/mitchellh/hashstructure/v2 v2.0.2/go.mod h1:MG3aRVU/N29oo/V/IhBX8GR/zz4kQkprJgF2EVszyDE=
-github.com/mitoteam/goapp v1.0.9 h1:KL2yZv8GHXsFTMoOVwAKcLJV4ZqlCB8GhvC5gLG5cAQ=
-github.com/mitoteam/goapp v1.0.9/go.mod h1:M6N6F98q8L23M4XVAkeNHbjJxQpWMTSeIpYO/xnT4N8=
+github.com/mitoteam/goapp v1.0.10 h1:SWCT/SIVzsdMaMoGu7dqD02dLymx4O1FKSFaXugNgdQ=
+github.com/mitoteam/goapp v1.0.10/go.mod h1:M6N6F98q8L23M4XVAkeNHbjJxQpWMTSeIpYO/xnT4N8=
 github.com/mitoteam/mttools v1.0.8 h1:Lbq0j9FUWVslarCez/3VM4Za+4kAxVc/4XnJzqD1r+s=
 github.com/mitoteam/mttools v1.0.8/go.mod h1:pgReIWU3E5FzIcyzB1JqPYIvsszInvFosMsd5v+qK00=
 github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
