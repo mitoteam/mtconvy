@@ -1,7 +1,6 @@
 package app
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -9,6 +8,7 @@ import (
 	"regexp"
 	"sort"
 
+	huh "charm.land/huh/v2"
 	"github.com/mitoteam/mttools"
 )
 
@@ -73,22 +73,30 @@ func (t *Task) SelectFiles() error {
 	sort.Strings(options_list)
 
 	if len(options_list) > 0 {
-		fmt.Println()
-		fmt.Println("*** Please select files to process:")
-		numbers_list, err := mttools.AskUserChoiceMultiple(
-			"Enter file numbers separated by space or comma and press Enter. Empty input means \"All Files\". \"0\" means \"Cancel\".\nYour choice: ",
-			options_list, true,
+		var numbers_list []int //result
+		var huh_options []huh.Option[int]
+
+		for index, fileName := range options_list {
+			huh_options = append(huh_options, huh.NewOption(fileName, index))
+		}
+
+		// Build the multi-select form
+		form := huh.NewForm(
+			huh.NewGroup(
+				huh.NewMultiSelect[int]().
+					Title("Please select files to process:").
+					Description("Just press ENTER to select all files").
+					Options(huh_options...).
+					Height(GetHuhMultiselectHeight(len(huh_options))).
+					Value(&numbers_list), // Binds selected values here
+			),
 		)
 
-		if err != nil {
+		if err := form.Run(); err != nil {
 			return err
 		}
 
-		if len(numbers_list) == 1 && numbers_list[0] == -1 {
-			return errors.New("Action cancelled")
-		}
-
-		//all files
+		//nothing selected = all files
 		if len(numbers_list) == 0 {
 			for i := 0; i < len(options_list); i++ {
 				numbers_list = append(numbers_list, i)
@@ -105,7 +113,7 @@ func (t *Task) SelectFiles() error {
 			t.items = append(t.items, &task_item)
 		}
 	} else {
-		log.Printf("No %s files found in current directory.", extensions)
+		fmt.Printf("No %s files found in current directory.", extensions)
 	}
 
 	return nil
@@ -113,7 +121,9 @@ func (t *Task) SelectFiles() error {
 
 func (t *Task) SelectStreams() error {
 	for i := 0; i < len(t.items); i++ {
-		t.items[i].SelectStreams()
+		if err := t.items[i].SelectStreams(); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -121,7 +131,9 @@ func (t *Task) SelectStreams() error {
 
 func (t *Task) Convert() error {
 	for i := 0; i < len(t.items); i++ {
-		t.items[i].Convert()
+		if err := t.items[i].Convert(); err != nil {
+			return err
+		}
 	}
 
 	return nil

@@ -2,11 +2,12 @@ package app
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 	"path/filepath"
 	"strconv"
 	"strings"
 
+	"github.com/mitoteam/goapp"
 	"github.com/mitoteam/mttools"
 )
 
@@ -22,23 +23,26 @@ type jsonFull struct {
 }
 
 type jsonStream struct {
-	Index       int               `json:"index"`
-	CodecName   string            `json:"codec_name"`
-	CodecType   string            `json:"codec_type"`
-	Width       int               `json:"width"`
-	Height      int               `json:"height"`
-	Disposition map[string]string `json:"disposition"`
-	Tags        map[string]string `json:"tags"`
+	Index         int               `json:"index"`
+	CodecName     string            `json:"codec_name"`
+	CodecType     string            `json:"codec_type"`
+	ChannelLayout string            `json:"channel_layout"`
+	Channels      int               `json:"channels"`
+	Width         int               `json:"width"`
+	Height        int               `json:"height"`
+	Disposition   map[string]string `json:"disposition"`
+	Tags          map[string]string `json:"tags"`
 }
 
-func FfGetStreamList(path string) []FfStream {
+func FfGetStreamList(path string) ([]FfStream, error) {
 	args := make([]string, 0)
 	args = append(args, "-hide_banner", "-v", "quiet", "-print_format", "json", "-show_streams", path)
 
+	goapp.PrintDev("ffprobe cmd: " + AppSettings.FfprobePath + " " + strings.Join(args, " "))
+
 	json_str, err := mttools.ExecCmd(AppSettings.FfprobePath, args)
 	if err != nil {
-		log.Printf("Error running ffprobe for %s: %s", filepath.Base(path), err.Error())
-		return make([]FfStream, 0) //empty list
+		return make([]FfStream, 0), fmt.Errorf("Error running ffprobe for %s: %s", filepath.Base(path), err.Error())
 	}
 
 	data := jsonFull{}
@@ -58,11 +62,6 @@ func FfGetStreamList(path string) []FfStream {
 
 		stream.Name = streamData.CodecType + "/" + streamData.CodecName
 
-		// resolution
-		if streamData.CodecType == "video" {
-			stream.Name += " " + strconv.Itoa(streamData.Width) + "x" + strconv.Itoa(streamData.Height)
-		}
-
 		//language
 		if streamData.CodecType == "audio" || streamData.CodecType == "subtitle" {
 			if v, exists := streamData.Tags["language"]; exists {
@@ -78,15 +77,29 @@ func FfGetStreamList(path string) []FfStream {
 			}
 		}
 
-		//title
+		// resolution
+		if streamData.CodecType == "video" {
+			stream.Name += " " + strconv.Itoa(streamData.Width) + "x" + strconv.Itoa(streamData.Height)
+		}
+
+		// channels
+		if streamData.CodecType == "audio" {
+			if streamData.ChannelLayout != "" {
+				stream.Name += " " + streamData.ChannelLayout
+			}
+		}
+
+		//title or name
 		if streamData.CodecType == "audio" || streamData.CodecType == "subtitle" {
 			if v, exists := streamData.Tags["title"]; exists {
-				stream.Name += " " + v
+				stream.Name += " \"" + v + "\""
+			} else if v, exists := streamData.Tags["name"]; exists {
+				stream.Name += " \"" + v + "\""
 			}
 		}
 
 		list = append(list, stream)
 	}
 
-	return list
+	return list, nil
 }

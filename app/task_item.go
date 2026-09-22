@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"log"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
 
+	huh "charm.land/huh/v2"
+	"github.com/mitoteam/goapp"
 	"github.com/mitoteam/mttools"
 )
 
@@ -19,16 +22,19 @@ type TaskItem struct {
 	Streams []FfStream
 }
 
-func (task_item *TaskItem) SelectStreams() {
+func (task_item *TaskItem) SelectStreams() error {
 	//clear list
 	task_item.Streams = make([]FfStream, 0)
 
 	// show available streams and ask user
 	fmt.Println()
-	fmt.Printf("*** FILE: %s\n", task_item.Name)
-	fmt.Println("Running ffprobe...")
+	fmt.Println("Running ffprobe for " + task_item.Name + "...")
 
-	stream_list := FfGetStreamList(task_item.Path)
+	stream_list, err := FfGetStreamList(task_item.Path)
+
+	if err != nil {
+		return err
+	}
 
 	if len(stream_list) > 0 {
 		//Prepare default selection
@@ -63,52 +69,57 @@ func (task_item *TaskItem) SelectStreams() {
 			}
 		}
 
-		options_list := make([]string, 0, len(stream_list))
-		for i := 0; i < len(stream_list); i++ {
-			options_list = append(options_list, stream_list[i].Name)
+		var selected []int
+		var huh_options []huh.Option[int]
+
+		for index, stream := range stream_list {
+			var selected = slices.Contains(default_selected, index)
+			var o = huh.NewOption(stream.Name, index).Selected(selected)
+
+			huh_options = append(huh_options, o)
 		}
 
-		var default_choice string
-		for i := 0; i < len(default_selected); i++ {
-			if default_choice != "" {
-				default_choice += " "
-			}
-			default_choice += strconv.Itoa(default_selected[i] + 1)
+		var skip_option = huh.NewOption("* Skip this file (and ignore streams selection)", -1)
+		huh_options = append(huh_options, skip_option)
 
-			options_list[default_selected[i]] = "* " + options_list[default_selected[i]]
-		}
-
-		fmt.Println("Please select streams to include to output. \"0\" = skip file conversion.")
-
-		selected, err := mttools.AskUserChoiceMultiple(
-			"Your choice (default: "+default_choice+"): ",
-			options_list, true,
+		// Build the multi-select form
+		form := huh.NewForm(
+			huh.NewGroup(
+				huh.NewMultiSelect[int]().
+					Title(task_item.Name).
+					Description("Please select streams to include to output:").
+					Options(huh_options...).
+					Height(GetHuhMultiselectHeight(len(huh_options))).
+					Value(&selected), // Binds selected values here
+			),
 		)
 
-		if err == nil {
-			if len(selected) == 1 && selected[0] == -1 {
-				task_item.skipTask = true
-				return
-			}
+		if err := form.Run(); err != nil {
+			return err
+		}
 
-			if len(selected) == 0 {
-				selected = default_selected
-			}
+		//fmt.Printf("DBG selection: %v", selected)
 
-			//fill with selected streams
-			task_item.Streams = make([]FfStream, len(selected))
+		if slices.Contains(selected, -1) {
+			task_item.skipTask = true
+			return nil
+		}
 
-			for i := 0; i < len(selected); i++ {
-				task_item.Streams[i] = stream_list[selected[i]]
-			}
+		//fill with selected streams
+		task_item.Streams = make([]FfStream, len(selected))
+
+		for i := 0; i < len(selected); i++ {
+			task_item.Streams[i] = stream_list[selected[i]]
 		}
 	}
+
+	return nil
 }
 
-func (task_item *TaskItem) Convert() {
+func (task_item *TaskItem) Convert() error {
 	if task_item.skipTask {
-		fmt.Println("\nSkipping conversion for ", task_item.Name)
-		return
+		fmt.Println("\nSkipping conversion for " + task_item.Name)
+		return nil
 	}
 
 	//only if something was selected
@@ -121,10 +132,10 @@ func (task_item *TaskItem) Convert() {
 		args := make([]string, 0, 10)
 
 		//generic options
-		args = append(args, "-y")                 //overwrite DST file silently
-		args = append(args, "-hide_banner")       //do not print ffmpeg intro banner
-		args = append(args, "-loglevel", "error") //be silent
-		args = append(args, "-stats", "-stats_period", "5")
+		args = append(args, "-y")                           //overwrite DST file silently
+		args = append(args, "-hide_banner")                 //do not print ffmpeg intro banner
+		args = append(args, "-loglevel", "error")           //be silent
+		args = append(args, "-stats", "-stats_period", "5") //update progress every 5 seconds
 
 		//input file
 		args = append(args, "-i", task_item.Path)
@@ -154,7 +165,7 @@ func (task_item *TaskItem) Convert() {
 		args = append(args, new_filename)
 
 		fmt.Println("\nStarting ffmpeg for", task_item.Name)
-		//fmt.Println("ARGS:", args)
+		goapp.PrintDev("ffmpeg command: " + AppSettings.FfmpegPath + " " + strings.Join(args, " "))
 
 		//call ffmpeg
 		//fmt.Print(args)
@@ -167,4 +178,6 @@ func (task_item *TaskItem) Convert() {
 
 		fmt.Printf("Done. Took %s.\n", elapsed)
 	}
+
+	return nil
 }
