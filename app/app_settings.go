@@ -2,7 +2,7 @@ package app
 
 import (
 	"bufio"
-	"log"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -75,11 +75,11 @@ func (s *appSettingsType) Load(path string) {
 
 	// Load settings
 	if mttools.IsFileExists(filename) {
-		log.Println("Settings file loaded: " + filename)
+		fmt.Println("Settings file loaded: " + filename)
 
 		mttools.LoadYamlSettingFromFile(filename, s)
 	} else {
-		log.Println("No " + DefaultSettingsFilename + " file found. Using default settings.")
+		fmt.Println("No " + DefaultSettingsFilename + " file found. Using default settings.")
 	}
 }
 
@@ -87,32 +87,32 @@ func (s *appSettingsType) Print() {
 	mttools.PrintYamlSettings(s)
 }
 
-func (s *appSettingsType) Check() bool {
+func (s *appSettingsType) Check() error {
 	//Check FFMPEG
 	out, err := mttools.ExecCmd(s.FfmpegPath, []string{"-version"})
 
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
 	//read first line
 	scanner := bufio.NewReader(strings.NewReader(out))
 	out, _ = scanner.ReadString('\n')
 
-	log.Print("FFmpeg found: " + out)
+	fmt.Print("FFmpeg found: " + out)
 
 	//Check FFPROBE
 	out, err = mttools.ExecCmd(s.FfprobePath, []string{"-version"})
 
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
 	//read first line
 	scanner = bufio.NewReader(strings.NewReader(out))
 	out, _ = scanner.ReadString('\n')
 
-	log.Print("FFprobe found: " + out)
+	fmt.Print("FFprobe found: " + out)
 
-	return true
+	return nil
 }

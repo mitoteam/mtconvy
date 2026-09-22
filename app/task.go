@@ -1,6 +1,7 @@
 package app
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -29,10 +30,10 @@ func NewTask(path string) *Task {
 	return t
 }
 
-func (t *Task) SelectFiles() {
+func (t *Task) SelectFiles() error {
 	directory_files_list, err := os.ReadDir(t.path)
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
 	//options to display to user
@@ -75,13 +76,16 @@ func (t *Task) SelectFiles() {
 		fmt.Println()
 		fmt.Println("*** Please select files to process:")
 		numbers_list, err := mttools.AskUserChoiceMultiple(
-			"Enter file numbers separated by space or comma and press Enter. Empty input means \"All Files\".\nYour choice: ",
+			"Enter file numbers separated by space or comma and press Enter. Empty input means \"All Files\". \"0\" means \"Cancel\".\nYour choice: ",
 			options_list, true,
 		)
 
 		if err != nil {
-			log.Println(err.Error())
-			return
+			return err
+		}
+
+		if len(numbers_list) == 1 && numbers_list[0] == -1 {
+			return errors.New("Action cancelled")
 		}
 
 		//all files
@@ -103,16 +107,22 @@ func (t *Task) SelectFiles() {
 	} else {
 		log.Printf("No %s files found in current directory.", extensions)
 	}
+
+	return nil
 }
 
-func (t *Task) SelectStreams() {
+func (t *Task) SelectStreams() error {
 	for i := 0; i < len(t.items); i++ {
 		t.items[i].SelectStreams()
 	}
+
+	return nil
 }
 
-func (t *Task) Convert() {
+func (t *Task) Convert() error {
 	for i := 0; i < len(t.items); i++ {
 		t.items[i].Convert()
 	}
+
+	return nil
 }
