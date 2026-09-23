@@ -19,18 +19,59 @@ original_suffix: ORI
 str_replace:
   ".WEB-DL": ""
   ".WEBRip": ""
+  ".REMUX": ""
   ".UHD": ""
+  ".HEVC": ""
+  ".HDR": ""
   ".Open.Matte": ""
+  ".OpenMatte": ""
   ".BD.Rip": ""
   ".BDRip": ""
+  ".BDRemux": ""
+  ".BluRay": ""
   ".h264": ""
+  ".h265": ""
   ".x264": ""
+  ".x265": ""
+  ".H.264": ""
+  ".H.265": ""
+  ".H265": ""
   ".AAC5.1": ""
+  ".DDP5.1": ""
+  ".DTS": ""
   ".Rus": ""
+  ".2xRus": ""
+  ".3xRus": ""
+  ".4xRus": ""
   ".Eng": ""
+  ".2xEng": ""
+  ".3xEng": ""
+  ".4xEng": ""
+  ".ATVP": ""
+  "-EniaHD": ""
+  ".EniaHD": ""
+  ".RGzsRutracker": ""
+  ".TeamHD": ""
+  ".NF": ""
+  ".TVShows": ""
+  ".Amedia": ""
+  ".HMAX": ""
+  ".AMZN": ""
+  ".(qqss44)": ""
+  ".HDCLUB": ""
+  ".by.AKTEP": ""
+  ".Ozz": ""
+  ".LostFilm": ""
+  "-SOFCJ": ""
+  "-NTb": ""
   " 720p": ""
   ".720p": ""
+  ".HD720p": ""
   ".1080p": ""
+  " (1080p HD)": ""
+  ".HD1080": ""
+  ".DV": ""
+  ".HDR10": ""
   ".2160p": ".4k"
   ".1990": " (1990)"
   ".1991": " (1991)"
@@ -75,11 +116,11 @@ str_replace:
   ".2030": " (2030)"
 
 
-# Preferred languages for audio and subtitles to be default choice when selecting file streams. Streams could be re-selected per-file.
+# Preferred languages for audio and subtitles to be default choice
 languages: [RUS, ENG]
 
 
-# Uncomment if you need custom paths to ffmpeg binaries.
+# custom paths to ffmpeg binaries
 ffmpeg_path: /var/packages/ffmpeg/target/bin/ffmpeg
 ffprobe_path: /var/packages/ffmpeg/target/bin/ffprobe
 
