@@ -1,0 +1,85 @@
+# mtconvy settings file real life ultimate example
+# File is looked in following locations: current dir, directory with `mtconvy` executable, home directory
+
+# Conversions to execute.
+# Run `ffmpeg -decoders` or `ffmpeg -encoders` to see all supported codecs.
+# All other streams just copied as is.
+conversions:
+  dts: eac3
+
+# Suffix to be appended to output file name.
+suffix: CNV
+
+# Set to 'yes' to replace original files with converted ones after successful conversion.
+# Original files will be renamed with `original_suffix` appended to their names and converted file will be renamed to original.
+replace_original: yes
+original_suffix: ORI
+
+# Strings to replace in original file name. Works only when `replace_original` is set to "yes".
+str_replace:
+  ".WEB-DL": ""
+  ".WEBRip": ""
+  ".UHD": ""
+  ".Open.Matte": ""
+  ".BD.Rip": ""
+  ".BDRip": ""
+  ".h264": ""
+  ".x264": ""
+  ".AAC5.1": ""
+  ".Rus": ""
+  ".Eng": ""
+  " 720p": ""
+  ".720p": ""
+  ".1080p": ""
+  ".2160p": ".4k"
+  ".1990": " (1990)"
+  ".1991": " (1991)"
+  ".1992": " (1992)"
+  ".1993": " (1993)"
+  ".1994": " (1994)"
+  ".1995": " (1995)"
+  ".1996": " (1996)"
+  ".1997": " (1997)"
+  ".1998": " (1998)"
+  ".1999": " (1999)"
+  ".2000": " (2000)"
+  ".2001": " (2001)"
+  ".2002": " (2002)"
+  ".2003": " (2003)"
+  ".2004": " (2004)"
+  ".2005": " (2005)"
+  ".2006": " (2006)"
+  ".2007": " (2007)"
+  ".2008": " (2008)"
+  ".2009": " (2009)"
+  ".2010": " (2010)"
+  ".2011": " (2011)"
+  ".2012": " (2012)"
+  ".2013": " (2013)"
+  ".2014": " (2014)"
+  ".2015": " (2015)"
+  ".2016": " (2016)"
+  ".2017": " (2017)"
+  ".2018": " (2018)"
+  ".2019": " (2019)"
+  ".2020": " (2020)"
+  ".2021": " (2021)"
+  ".2022": " (2022)"
+  ".2023": " (2023)"
+  ".2024": " (2024)"
+  ".2025": " (2025)"
+  ".2026": " (2026)"
+  ".2027": " (2027)"
+  ".2028": " (2028)"
+  ".2029": " (2029)"
+  ".2030": " (2030)"
+
+
+# Preferred languages for audio and subtitles to be default choice when selecting file streams. Streams could be re-selected per-file.
+languages: [RUS, ENG]
+
+
+# Uncomment if you need custom paths to ffmpeg binaries.
+ffmpeg_path: /var/packages/ffmpeg/target/bin/ffmpeg
+ffprobe_path: /var/packages/ffmpeg/target/bin/ffprobe
+
