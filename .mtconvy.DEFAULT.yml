@@ -1,4 +1,4 @@
-# mtconvy settings file
+# mtconvy example settings file
 # File is looked in following locations: current dir, directory with `mtconvy` executable, home directory
 
 # Conversions to execute.
@@ -17,7 +17,7 @@
 #replace_original: no
 #original_suffix: ORIGINAL
 
-# strings to replace in original file name. Works only when `replace_original` is set to "yes".
+# Strings to replace in original file name. Works only when `replace_original` is set to "yes".
 #str_replace:
 #  ".WEB-DL": ""
 #  ".2160p": ".4k"
