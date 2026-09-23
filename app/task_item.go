@@ -111,8 +111,14 @@ func (task_item *TaskItem) SelectStreams() error {
 						return fmt.Errorf("filename cannot be empty")
 					}
 
+					s = filepath.Join(task_item.task.Path, s+task_item.Ext)
+
+					if s == task_item.OriginalPath {
+						return nil //original filename is allowed
+					}
+
 					//check new filename
-					return mttools.ValidateNewFilePath(filepath.Join(task_item.task.Path, s+task_item.Ext))
+					return mttools.ValidateNewFilePath(s)
 				})
 
 			group_fields = append(group_fields, input_field)
@@ -136,11 +142,16 @@ func (task_item *TaskItem) SelectStreams() error {
 		if AppSettings.ReplaceOriginal {
 			task_item.ResultBaseName = strings.TrimSpace(task_item.ResultBaseName)
 
-			//check new filename
-			err = mttools.ValidateNewFilePath(filepath.Join(task_item.task.Path, task_item.ResultBaseName+task_item.Ext))
+			s := filepath.Join(task_item.task.Path, task_item.ResultBaseName+task_item.Ext)
 
-			if err != nil {
-				return err
+			if s != task_item.OriginalPath {
+				//check new filename
+				err = mttools.ValidateNewFilePath(filepath.Join(task_item.task.Path, task_item.ResultBaseName+task_item.Ext))
+
+				if err != nil {
+					return err
+				}
+
 			}
 		}
 
