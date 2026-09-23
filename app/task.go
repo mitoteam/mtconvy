@@ -109,7 +109,7 @@ func (t *Task) SelectFiles() error {
 			file_name := files_list[numbers_list[i]]
 
 			task_item := TaskItem{
-				Name:     options_list[numbers_list[i]],
+				TaskName: options_list[numbers_list[i]],
 				Path:     filepath.Join(t.path, file_name),
 				BaseName: strings.TrimSuffix(file_name, filepath.Ext(file_name)),
 				Ext:      filepath.Ext(file_name),

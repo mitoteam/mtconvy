@@ -15,7 +15,8 @@ import (
 )
 
 type TaskItem struct {
-	Name     string //task name (filename + size)
+	TaskName string //task name (filename + size)
+
 	BaseName string //filename without extension
 	Ext      string //file extension
 	Path     string //full path with filename
@@ -31,7 +32,7 @@ func (task_item *TaskItem) SelectStreams() error {
 
 	// show available streams and ask user
 	fmt.Println()
-	fmt.Println("Running ffprobe for " + task_item.Name + "...")
+	fmt.Println("Running ffprobe for " + task_item.TaskName + "...")
 
 	stream_list, err := FfGetStreamList(task_item.Path)
 
@@ -89,8 +90,9 @@ func (task_item *TaskItem) SelectStreams() error {
 		form := huh.NewForm(
 			huh.NewGroup(
 				huh.NewMultiSelect[int]().
-					Title(task_item.Name).
+					Title(task_item.TaskName).
 					Description("Please select streams to include to output:").
+					Description(task_item.getResultFilePath()).
 					Options(huh_options...).
 					Height(GetHuhMultiselectHeight(len(huh_options))).
 					Value(&selected), // Binds selected values here
@@ -121,7 +123,7 @@ func (task_item *TaskItem) SelectStreams() error {
 
 func (task_item *TaskItem) Convert() error {
 	if task_item.skipTask {
-		fmt.Println("\nSkipping conversion for " + task_item.Name)
+		fmt.Println("\nSkipping conversion for " + task_item.TaskName)
 		return nil
 	}
 
@@ -164,7 +166,7 @@ func (task_item *TaskItem) Convert() error {
 		//output file
 		args = append(args, new_filename)
 
-		fmt.Println("\nStarting ffmpeg for", task_item.Name)
+		fmt.Println("\nStarting ffmpeg for", task_item.TaskName)
 		goapp.PrintDev("ffmpeg command: " + AppSettings.FfmpegPath + " " + strings.Join(args, " "))
 
 		//call ffmpeg
@@ -187,11 +189,21 @@ func (task_item *TaskItem) Convert() error {
 			}
 
 			//rename converted file to original name
-			if err := os.Rename(new_filename, task_item.Path); err != nil {
+			if err := os.Rename(new_filename, task_item.getResultFilePath()); err != nil {
 				return fmt.Errorf("Failed to rename converted file: %v", err)
 			}
 		}
 	}
 
 	return nil
+}
+
+func (task_item *TaskItem) getResultFilePath() string {
+	original_basename := task_item.BaseName
+
+	for s, r := range AppSettings.StrReplace {
+		original_basename = strings.ReplaceAll(original_basename, s, r)
+	}
+
+	return filepath.Join(filepath.Dir(task_item.Path), original_basename+task_item.Ext)
 }

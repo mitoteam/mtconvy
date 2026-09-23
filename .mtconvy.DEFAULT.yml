@@ -12,14 +12,21 @@
 # Suffix to be appended to output file name.
 #suffix: CONVERTED
 
-# Set to yes to replace original files with converted ones after successful conversion.
+# Set to 'yes' to replace original files with converted ones after successful conversion.
 # Original files will be renamed with `original_suffix` appended to their names and converted file will be renamed to original.
 #replace_original: no
 #original_suffix: ORIGINAL
 
-# Preferred languages for audio and subtitles to be default choice when selecting file streams. Could be overridden per-file.
+# strings to replace in original file name. Works only when `replace_original` is set to "yes".
+#str_replace:
+#  ".WEB-DL": ""
+#  ".2160p": ".4k"
+
+
+# Preferred languages for audio and subtitles to be default choice when selecting file streams. Streams could be re-selected per-file.
 #languages: [UKR, ENG]
 
-# Uncomment if you really need custom paths to ffmpeg binaries
+
+# Uncomment if you need custom paths to ffmpeg binaries.
 #ffmpeg_path: /var/packages/ffmpeg/target/bin/ffmpeg
 #ffprobe_path: /var/packages/ffmpeg/target/bin/ffprobe

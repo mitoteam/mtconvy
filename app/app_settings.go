@@ -19,8 +19,9 @@ type appSettingsType struct {
 
 	Suffix string `yaml:"suffix"`
 
-	ReplaceOriginal bool   `yaml:"replace_original"`
-	OriginalSuffix  string `yaml:"original_suffix"`
+	ReplaceOriginal bool              `yaml:"replace_original"`
+	OriginalSuffix  string            `yaml:"original_suffix"`
+	StrReplace      map[string]string `yaml:"str_replace"`
 
 	Languages []string `yaml:"languages"`
 }
@@ -43,6 +44,7 @@ func getDefaultAppSettings() *appSettingsType {
 
 		Suffix:         "CONVERTED",
 		OriginalSuffix: "ORIGINAL",
+		StrReplace:     map[string]string{},
 
 		Languages: []string{"ENG", "RUS"},
 	}
@@ -51,38 +53,31 @@ func getDefaultAppSettings() *appSettingsType {
 }
 
 func (s *appSettingsType) Load(path string) {
-	var settingspath string
-	var err error
-
 	//1) look in current directory
-	filename := filepath.Join(path, DefaultSettingsFilename)
+	settings_file_path := filepath.Join(path, DefaultSettingsFilename)
 
 	//2) look near executable
-	if !mttools.IsFileExists(filename) {
-		settingspath, err = os.Executable()
-
-		if err == nil {
-			settingspath = filepath.Dir(settingspath)
-			//log.Println(settingspath)
-			filename = filepath.Join(settingspath, DefaultSettingsFilename)
+	if !mttools.IsFileExists(settings_file_path) {
+		if dir, err := os.Executable(); err == nil {
+			dir = filepath.Dir(dir)
+			//log.Println(dir)
+			settings_file_path = filepath.Join(dir, DefaultSettingsFilename)
 		}
 	}
 
 	//3) look in homedir
-	if !mttools.IsFileExists(filename) {
-		settingspath, err = os.UserHomeDir()
-		//log.Println(settingspath)
-
-		if err == nil {
-			filename = filepath.Join(settingspath, DefaultSettingsFilename)
+	if !mttools.IsFileExists(settings_file_path) {
+		if dir, err := os.UserHomeDir(); err == nil {
+			//log.Println(dir)
+			settings_file_path = filepath.Join(dir, DefaultSettingsFilename)
 		}
 	}
 
 	// Load settings
-	if mttools.IsFileExists(filename) {
-		fmt.Println("Settings file loaded: " + filename)
+	if mttools.IsFileExists(settings_file_path) {
+		fmt.Println("Settings file loaded: " + settings_file_path)
 
-		mttools.LoadYamlSettingFromFile(filename, s)
+		mttools.LoadYamlSettingFromFile(settings_file_path, s)
 	} else {
 		fmt.Println("No " + DefaultSettingsFilename + " file found. Using default settings.")
 	}
