@@ -10,11 +10,17 @@
 
 mtconvy - ffmpeg command-line helper utility to convert DTS audio tracks in video files to AC3 or AAC ones using ffmpeg utility.
 
-LG TVs does no support DTS codecs in videos since 2020. So conversion to AC3 is required.
-It is well done with ffmpeg. But there two problems: 1) ffmpeg has very complicated command-line syntax hard to keep in memory
-2) you should manually explore available tracks with `ffprobe` or `mediainfo` to know which tracks to convert.
+LG dropped DTS support for the 2020–2022 models of their TVs and removed it once again starting with the 2025 models.
+So if you downloaded movie wuth high-quailty DTS sound you have to coinvert it to AC3 or AAC codec.
 
-This utility makes selection of tracks and conversion very simple and easy.
+This is done well with `ffmpeg`. But there two problems:
+
+1) ffmpeg has very complicated command-line syntax hard to keep in memory
+2) you should manually explore available tracks with `ffprobe` or `mediainfo` to know which tracks to convert
+
+`mtconvy` utility makes selection of tracks and conversion very simple and easy. It also support file renaming.
+
+Works well on PCs under Linux/Windows and also on Linux-based NASes.
 
 ## Installation
 
@@ -53,3 +59,7 @@ scoop update mtconvy
 Just run `mtconvy` in directory you want to convert some file(s). It will ask you to choose files to convert first. Then it will ask you what streams to keep for each file.
 
 You can adjust some options in config file `.mtconvy.yml`.
+
+## Feedback
+
+Please feel free to create issues to discuss new fetures or improve utilty. Bugreports are also always welcomed.
