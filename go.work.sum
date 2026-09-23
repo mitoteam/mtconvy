@@ -170,7 +170,8 @@ github.com/mattn/go-sqlite3 v1.14.16/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S
 github.com/memcachier/mc v2.0.1+incompatible/go.mod h1:7bkvFE61leUBvXz+yxsOnGBQSZpBSPIMUQSmmSHvuXc=
 github.com/memcachier/mc/v3 v3.0.3/go.mod h1:GzjocBahcXPxt2cmqzknrgqCOmMxiSzhVKPOe90Tpug=
 github.com/mitoteam/goapp v1.0.5/go.mod h1:Hkqwxsf3MjxFtP8QMIGphIhI6S855JtXJt2ifNYxOGU=
-github.com/mitoteam/goapp v1.0.10/go.mod h1:M6N6F98q8L23M4XVAkeNHbjJxQpWMTSeIpYO/xnT4N8=
+github.com/mitoteam/mttools v1.0.9 h1:bEkmPdQU1TViUzFW7xRdsgEw6iXpsm7mAa2gQddZCEU=
+github.com/mitoteam/mttools v1.0.9/go.mod h1:pgReIWU3E5FzIcyzB1JqPYIvsszInvFosMsd5v+qK00=
 github.com/montanaflynn/stats v0.7.1/go.mod h1:etXPPgVO6n31NxCd9KQUMvCM+ve0ruNzt6R8Bnaayow=
 github.com/montanaflynn/stats v0.12.2/go.mod h1:etXPPgVO6n31NxCd9KQUMvCM+ve0ruNzt6R8Bnaayow=
 github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6/go.mod h1:CJlz5H+gyd6CUWT45Oy4q24RdLyn7Md9Vj2/ldJBSIo=
