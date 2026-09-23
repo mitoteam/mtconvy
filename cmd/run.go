@@ -30,52 +30,43 @@ var runCmd = &cobra.Command{
 			}
 		}
 
-		return doConversion(path)
+		fmt.Println(app.AppName + " v" + goapp.BuildVersion + " - " + app.AppDescription)
+		fmt.Println(goapp.MOTTO)
+		fmt.Println()
+
+		if !mttools.IsDirExists(path) {
+			return fmt.Errorf("Directory %s does not exist", path)
+		}
+
+		//Deal with settings
+		app.AppSettings.Load(path)
+		app.AppSettings.Print()
+
+		if err := app.AppSettings.Check(); err != nil {
+			return err
+		}
+
+		fmt.Printf("Current directory: %s\n", path)
+
+		//Create task
+		task := app.NewTask(path)
+
+		if err := task.SelectFiles(); err != nil {
+			return err
+		}
+
+		if err := task.SelectStreams(); err != nil {
+			return err
+		}
+
+		if err := task.Convert(); err != nil {
+			return err
+		}
+
+		return nil //no errors
 	},
 }
 
 func init() {
-	// cmd.Flags().BoolVar(
-	// 	&app.JobRuntimeOptions.Solid, "solid", false,
-	// 	"Create solid archives.",
-	// )
-
 	rootCmd.AddCommand(runCmd)
-}
-
-func doConversion(path string) error {
-	fmt.Println(app.AppName + " v" + goapp.BuildVersion + " - " + app.AppDescription)
-	fmt.Println(goapp.MOTTO)
-	fmt.Println()
-
-	if !mttools.IsDirExists(path) {
-		return fmt.Errorf("Directory %s does not exist", path)
-	}
-
-	//Deal with settings
-	app.AppSettings.Load(path)
-	app.AppSettings.Print()
-
-	if err := app.AppSettings.Check(); err != nil {
-		return err
-	}
-
-	fmt.Printf("Current directory: %s\n", path)
-
-	//Create task
-	task := app.NewTask(path)
-
-	if err := task.SelectFiles(); err != nil {
-		return err
-	}
-
-	if err := task.SelectStreams(); err != nil {
-		return err
-	}
-
-	if err := task.Convert(); err != nil {
-		return err
-	}
-
-	return nil //no errors
 }
