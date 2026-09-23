@@ -41,8 +41,10 @@ func getDefaultAppSettings() *appSettingsType {
 		Conversions:  map[string]string{"dts": "eac3"},
 		AudioBitrate: "640k",
 
-		Suffix:    "CONVERTED",
-		Languages: []string{"ENG"},
+		Suffix:         "CONVERTED",
+		OriginalSuffix: "ORIGINAL",
+
+		Languages: []string{"ENG", "RUS"},
 	}
 
 	return &settings
