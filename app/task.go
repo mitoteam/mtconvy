@@ -16,7 +16,7 @@ import (
 type Task struct {
 	items []*TaskItem
 
-	path string
+	Path string
 }
 
 func NewTask(path string) *Task {
@@ -24,15 +24,15 @@ func NewTask(path string) *Task {
 		log.Fatalf("Path %s does not exists", path)
 	}
 
-	t := &Task{}
-
-	t.path = path
+	t := &Task{
+		Path: filepath.Clean(path),
+	}
 
 	return t
 }
 
 func (t *Task) SelectFiles() error {
-	directory_files_list, err := os.ReadDir(t.path)
+	directory_files_list, err := os.ReadDir(t.Path)
 	if err != nil {
 		return err
 	}
@@ -109,10 +109,20 @@ func (t *Task) SelectFiles() error {
 			file_name := files_list[numbers_list[i]]
 
 			task_item := TaskItem{
-				TaskName: options_list[numbers_list[i]],
-				Path:     filepath.Join(t.path, file_name),
-				BaseName: strings.TrimSuffix(file_name, filepath.Ext(file_name)),
-				Ext:      filepath.Ext(file_name),
+				task: t,
+
+				ItemName:     options_list[numbers_list[i]],
+				OriginalPath: filepath.Join(t.Path, file_name), //full
+				BaseName:     strings.TrimSuffix(file_name, filepath.Ext(file_name)),
+				Ext:          filepath.Ext(file_name),
+			}
+
+			if AppSettings.ReplaceOriginal {
+				task_item.ResultBaseName = task_item.BaseName
+
+				for s, r := range AppSettings.StrReplace {
+					task_item.ResultBaseName = strings.ReplaceAll(task_item.ResultBaseName, s, r)
+				}
 			}
 
 			t.items = append(t.items, &task_item)

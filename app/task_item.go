@@ -15,15 +15,19 @@ import (
 )
 
 type TaskItem struct {
-	TaskName string //task name (filename + size)
+	ItemName string //task name (filename + size)
 
-	BaseName string //filename without extension
+	OriginalPath string //full path with filename
+
+	BaseName string //original filename without extension
 	Ext      string //file extension
-	Path     string //full path with filename
 
-	skipTask bool // do not convert this file at all
+	ResultBaseName string //result filename without extension
 
 	Streams []FfStream
+
+	skipTask bool // do not convert this file at all
+	task     *Task
 }
 
 func (task_item *TaskItem) SelectStreams() error {
@@ -32,9 +36,9 @@ func (task_item *TaskItem) SelectStreams() error {
 
 	// show available streams and ask user
 	fmt.Println()
-	fmt.Println("Running ffprobe for " + task_item.TaskName + "...")
+	fmt.Println("Running ffprobe for " + task_item.ItemName + "...")
 
-	stream_list, err := FfGetStreamList(task_item.Path)
+	stream_list, err := FfGetStreamList(task_item.OriginalPath)
 
 	if err != nil {
 		return err
@@ -87,16 +91,35 @@ func (task_item *TaskItem) SelectStreams() error {
 		huh_options = append(huh_options, skip_option)
 
 		// Build the multi-select form
+		group_fields := []huh.Field{
+			huh.NewMultiSelect[int]().
+				Title(task_item.ItemName).
+				Description("Please select streams to include to output:").
+				Options(huh_options...).
+				Height(GetHuhMultiselectHeight(len(huh_options))).
+				Value(&selected),
+		}
+
+		if AppSettings.ReplaceOriginal {
+			input_field := huh.NewInput().
+				Title("Result filename").
+				Value(&task_item.ResultBaseName).
+				Validate(func(s string) error {
+					s = strings.TrimSpace(s)
+
+					if s == "" {
+						return fmt.Errorf("filename cannot be empty")
+					}
+
+					//check new filename
+					return mttools.ValidateNewFilePath(filepath.Join(task_item.task.Path, s+task_item.Ext))
+				})
+
+			group_fields = append(group_fields, input_field)
+		}
+
 		form := huh.NewForm(
-			huh.NewGroup(
-				huh.NewMultiSelect[int]().
-					Title(task_item.TaskName).
-					Description("Please select streams to include to output:").
-					Description(task_item.getResultFilePath()).
-					Options(huh_options...).
-					Height(GetHuhMultiselectHeight(len(huh_options))).
-					Value(&selected), // Binds selected values here
-			),
+			huh.NewGroup(group_fields...),
 		)
 
 		if err := form.Run(); err != nil {
@@ -108,6 +131,17 @@ func (task_item *TaskItem) SelectStreams() error {
 		if slices.Contains(selected, -1) {
 			task_item.skipTask = true
 			return nil
+		}
+
+		if AppSettings.ReplaceOriginal {
+			task_item.ResultBaseName = strings.TrimSpace(task_item.ResultBaseName)
+
+			//check new filename
+			err = mttools.ValidateNewFilePath(filepath.Join(task_item.task.Path, task_item.ResultBaseName+task_item.Ext))
+
+			if err != nil {
+				return err
+			}
 		}
 
 		//fill with selected streams
@@ -123,13 +157,13 @@ func (task_item *TaskItem) SelectStreams() error {
 
 func (task_item *TaskItem) Convert() error {
 	if task_item.skipTask {
-		fmt.Println("\nSkipping conversion for " + task_item.TaskName)
+		fmt.Println("\nSkipping conversion for " + task_item.ItemName)
 		return nil
 	}
 
 	//only if something was selected
 	if len(task_item.Streams) > 0 {
-		new_filename := filepath.Join(filepath.Dir(task_item.Path), task_item.BaseName+"_"+AppSettings.Suffix+task_item.Ext)
+		converted_filename := filepath.Join(task_item.task.Path, task_item.BaseName+"_"+AppSettings.Suffix+task_item.Ext)
 
 		args := make([]string, 0, 10)
 
@@ -140,7 +174,7 @@ func (task_item *TaskItem) Convert() error {
 		args = append(args, "-stats", "-stats_period", "5") //update progress every 5 seconds
 
 		//input file
-		args = append(args, "-i", task_item.Path)
+		args = append(args, "-i", task_item.OriginalPath)
 
 		//selected streams
 		for i := 0; i < len(task_item.Streams); i++ {
@@ -164,9 +198,9 @@ func (task_item *TaskItem) Convert() error {
 		}
 
 		//output file
-		args = append(args, new_filename)
+		args = append(args, converted_filename)
 
-		fmt.Println("\nStarting ffmpeg for", task_item.TaskName)
+		fmt.Println("\nStarting ffmpeg for", task_item.ItemName)
 		goapp.PrintDev("ffmpeg command: " + AppSettings.FfmpegPath + " " + strings.Join(args, " "))
 
 		//call ffmpeg
@@ -182,28 +216,18 @@ func (task_item *TaskItem) Convert() error {
 
 		if AppSettings.ReplaceOriginal {
 			//rename original file
-			original_filename := filepath.Join(filepath.Dir(task_item.Path), task_item.BaseName+"_"+AppSettings.OriginalSuffix+task_item.Ext)
+			original_filename := filepath.Join(task_item.task.Path, task_item.BaseName+"_"+AppSettings.OriginalSuffix+task_item.Ext)
 
-			if err := os.Rename(task_item.Path, original_filename); err != nil {
+			if err := os.Rename(task_item.OriginalPath, original_filename); err != nil {
 				return fmt.Errorf("Failed to rename original file: %v", err)
 			}
 
 			//rename converted file to original name
-			if err := os.Rename(new_filename, task_item.getResultFilePath()); err != nil {
+			if err := os.Rename(converted_filename, filepath.Join(task_item.task.Path, task_item.ResultBaseName+task_item.Ext)); err != nil {
 				return fmt.Errorf("Failed to rename converted file: %v", err)
 			}
 		}
 	}
 
 	return nil
-}
-
-func (task_item *TaskItem) getResultFilePath() string {
-	original_basename := task_item.BaseName
-
-	for s, r := range AppSettings.StrReplace {
-		original_basename = strings.ReplaceAll(original_basename, s, r)
-	}
-
-	return filepath.Join(filepath.Dir(task_item.Path), original_basename+task_item.Ext)
 }

@@ -9,7 +9,7 @@ require (
 	charm.land/huh/v2 v2.0.3
 	github.com/charmbracelet/x/term v0.2.2
 	github.com/mitoteam/goapp v1.0.10
-	github.com/mitoteam/mttools v1.0.8
+	github.com/mitoteam/mttools v1.0.9
 	github.com/spf13/cobra v1.10.2
 )
 
